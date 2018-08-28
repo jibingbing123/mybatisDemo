@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mappers 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mybatis.dao.UserMapper">
+    <resultMap id="userResult" type="User">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="age" column="age" />
+        <result property="sex" column="sex" />
+        <association property="address" column="id" select="com.mybatis.dao.AddressMapper.selectById"></association>
+    </resultMap>
+
+    <select id="selectAll" resultMap="userResult">
+        SELECT * FROM USER
+    </select>
+
+    <select id="selectById" parameterType="int" resultType="User">
+        SELECT * FROM user WHERE id=#{id}
+    </select>
+
+    <select id="selectUserWithAddressById" parameterType="int" resultMap="userResult">
+        SELECT * FROM user u,address a where u.addressId = a.id AND u.id=#{id}
+    </select>
+
+    <insert id="add" parameterType="User">
+        INSERT INTO user VALUES (NULL ,#{name},#{age},#{sex})
+    </insert>
+
+    <update id="update" parameterType="User">
+        UPDATE user SET name=#{name},age=#{age},sex=#{sex} WHERE id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM user WHERE id=#{id}
+    </delete>
+</mapper>
